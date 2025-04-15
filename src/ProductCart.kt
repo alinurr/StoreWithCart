@@ -1,14 +1,14 @@
-class PhysicalProductCart(val data: PhysicalProduct) {
-    var list = mutableListOf<PhysicalProduct>()
-    fun add(physicalProduct: PhysicalProduct){
-        if (data.quantity <= PhysicalProduct.stockCount){
+class ProductCart<CartItemType : CartItem> {
+    var list = mutableListOf<CartItemType>()
+    fun add(physicalProduct: CartItemType){
+        if (physicalProduct.isAvailableForCart()){
             list.add(physicalProduct)
         }else{
             println("Товар недоступен к продаже")
         }
     }
 
-    fun getLastCartItem(): PhysicalProduct {
+    fun getLastCartItem(): CartItemType {
         return list.last()
     }
 
@@ -18,7 +18,7 @@ class PhysicalProductCart(val data: PhysicalProduct) {
             println("Корзина пуста")
         }else{
             for (product in list){
-                sum += data.quantity * data.price
+                product.calculateTotalPrice()
             }
             println("Товары на общую сумму $sum долларов оплачены")
             list.clear()
